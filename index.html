@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="it" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Binary Lab</title>
+  <meta name="description" content="Convertitore binario, decimale, esadecimale, ottale e testo.">
+  <link rel="icon" type="image/png" href="icon.png">
+  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    // Applica subito il tema salvato (evita il "flash" bianco)
+    (function () {
+      try {
+        var t = localStorage.getItem('bl-theme');
+        if (!t) t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <canvas id="rain" aria-hidden="true"></canvas>
+
+  <div class="wrap">
+    <header class="top">
+      <a class="btn back" id="backBtn" href="https://noskynhk.github.io/">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span data-i18n="back">Torna alla Project Hub</span>
+      </a>
+
+      <div class="tools">
+        <div class="seg" role="group" aria-label="Language" id="langSeg">
+          <button type="button" data-lang="it">IT</button>
+          <button type="button" data-lang="en">EN</button>
+          <button type="button" data-lang="de">DE</button>
+        </div>
+        <button type="button" class="btn icon" id="themeBtn" aria-label="Theme" title="Theme">
+          <svg class="sun" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5.3 5.3l1.7 1.7M17 17l1.7 1.7M5.3 18.7L7 17M17 7l1.7-1.7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <svg class="moon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <img class="logo" src="icon.png" alt="" onerror="this.style.display='none'">
+      <h1><span class="grad">Binary</span> Lab</h1>
+      <p data-i18n="subtitle">Converti numeri e testo tra binario, ottale, decimale ed esadecimale.</p>
+      <div class="bits-deco" aria-hidden="true">01001110 01001111 01010011 01001011</div>
+    </section>
+
+    <nav class="tabs" role="tablist">
+      <button type="button" role="tab" class="tab active" data-tab="num" data-i18n="tabNum">Numeri</button>
+      <button type="button" role="tab" class="tab" data-tab="text" data-i18n="tabText">Testo</button>
+      <button type="button" role="tab" class="tab" data-tab="bits" data-i18n="tabBits">Bit</button>
+    </nav>
+
+    <!-- NUMERI -->
+    <main>
+      <section class="card panel" id="panel-num">
+        <div class="row two">
+          <label class="field">
+            <span data-i18n="inputLabel">Valore</span>
+            <input id="numInput" type="text" inputmode="text" autocomplete="off" spellcheck="false" data-i18n-ph="numPh" placeholder="es. 1011 0110">
+          </label>
+          <label class="field">
+            <span data-i18n="fromBase">Base di partenza</span>
+            <select id="numBase">
+              <option value="2">2 · Binario</option>
+              <option value="8">8 · Ottale</option>
+              <option value="10" selected>10 · Decimale</option>
+              <option value="16">16 · Esadecimale</option>
+              <option value="custom" data-i18n="customOpt">Personalizzata…</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="row" id="customFromRow" hidden>
+          <label class="field">
+            <span data-i18n="customFrom">Base personalizzata di partenza (2–36)</span>
+            <input id="customFrom" type="number" min="2" max="36" value="3">
+          </label>
+        </div>
+
+        <p class="msg" id="numMsg" role="alert"></p>
+
+        <div class="results" id="numResults"></div>
+
+        <div class="row">
+          <label class="field small">
+            <span data-i18n="customTo">Base personalizzata di arrivo (2–36)</span>
+            <input id="customTo" type="number" min="2" max="36" value="32">
+          </label>
+        </div>
+        <p class="hint" data-i18n="hintNum">Puoi usare spazi, prefissi (0b, 0o, 0x) e il segno meno. Nessun limite di grandezza.</p>
+      </section>
+
+      <!-- TESTO -->
+      <section class="card panel" id="panel-text" hidden>
+        <div class="row two">
+          <div class="field">
+            <span data-i18n="mode">Direzione</span>
+            <div class="seg wide" id="textMode">
+              <button type="button" data-mode="enc" class="on" data-i18n="textToCode">Testo → codice</button>
+              <button type="button" data-mode="dec" data-i18n="codeToText">Codice → testo</button>
+            </div>
+          </div>
+          <label class="field">
+            <span data-i18n="codeBase">Formato del codice</span>
+            <select id="textBase">
+              <option value="2" selected>Binario</option>
+              <option value="8">Ottale</option>
+              <option value="10">Decimale</option>
+              <option value="16">Esadecimale</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="field">
+          <span id="textInLabel" data-i18n="textIn">Il tuo testo</span>
+          <textarea id="textInput" rows="4" spellcheck="false" data-i18n-ph="textPh" placeholder="Ciao 👋"></textarea>
+        </label>
+
+        <div class="row actions">
+          <button type="button" class="btn ghost" id="textSwap" data-i18n="swap">⇅ Scambia</button>
+        </div>
+
+        <p class="msg" id="textMsg" role="alert"></p>
+
+        <div class="field">
+          <span data-i18n="result">Risultato</span>
+          <div class="out">
+            <pre id="textOutput" class="code big"></pre>
+            <button type="button" class="copy" id="textCopy" data-i18n="copy">Copia</button>
+          </div>
+        </div>
+        <p class="hint" data-i18n="hintText">Il testo viene codificato in UTF-8: emoji e lettere accentate occupano più byte.</p>
+      </section>
+
+      <!-- BIT -->
+      <section class="card panel" id="panel-bits" hidden>
+        <div class="row two">
+          <div class="field">
+            <span data-i18n="width">Larghezza</span>
+            <div class="seg wide" id="bitWidth">
+              <button type="button" data-w="8" class="on">8</button>
+              <button type="button" data-w="16">16</button>
+              <button type="button" data-w="32">32</button>
+              <button type="button" data-w="64">64</button>
+            </div>
+          </div>
+          <div class="field">
+            <span data-i18n="actions">Operazioni</span>
+            <div class="seg wide ops">
+              <button type="button" id="opClear" data-i18n="clear">Azzera</button>
+              <button type="button" id="opNot" data-i18n="invert">NOT</button>
+              <button type="button" id="opShl">&laquo; 1</button>
+              <button type="button" id="opShr">1 &raquo;</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bitgrid" id="bitGrid"></div>
+        <p class="hint" data-i18n="hintBits">Clicca sui bit per accenderli o spegnerli (1 = acceso).</p>
+
+        <div class="results" id="bitResults"></div>
+      </section>
+    </main>
+
+    <footer>
+      <a class="btn back small" id="backBtn2" href="https://noskynhk.github.io/">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span data-i18n="back">Torna alla Project Hub</span>
+      </a>
+      <p data-i18n="footer">Fatto con ♥ da Noskyn</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
