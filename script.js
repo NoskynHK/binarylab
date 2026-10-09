@@ -3,7 +3,7 @@
   'use strict';
 
   // Cambia qui se l'indirizzo della Project Hub è diverso
-  const HUB_URL = 'https://noskynhk.github.io/';
+  const HUB_URL = 'https://noskynhk.github.io/projecthub';
 
   /* ---------------- traduzioni ---------------- */
   const I18N = {
