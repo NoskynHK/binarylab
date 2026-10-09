@@ -26,7 +26,7 @@
       badByte: 'Ogni valore deve essere un byte valido (0–255) nella base scelta.',
       width: 'Larghezza', actions: 'Operazioni', clear: 'Azzera', invert: 'NOT',
       hintBits: 'Clicca sui bit per accenderli o spegnerli (1 = acceso).',
-      bitsUsed: 'Bit usati', footer: 'Fatto con ♥ da Noskyn'
+      bitsUsed: 'Bit usati', footer: 'Fatto da NoskynHK'
     },
     en: {
       title: 'Binary Lab', back: 'Back to Project Hub',
@@ -47,7 +47,7 @@
       badByte: 'Each value must be a valid byte (0–255) in the chosen base.',
       width: 'Width', actions: 'Operations', clear: 'Clear', invert: 'NOT',
       hintBits: 'Click the bits to toggle them on or off (1 = on).',
-      bitsUsed: 'Bits used', footer: 'Made with ♥ by Noskyn'
+      bitsUsed: 'Bits used', footer: 'Made by NoskynHK'
     },
     de: {
       title: 'Binary Lab', back: 'Zurück zum Project Hub',
@@ -68,7 +68,7 @@
       badByte: 'Jeder Wert muss ein gültiges Byte (0–255) in der gewählten Basis sein.',
       width: 'Breite', actions: 'Operationen', clear: 'Leeren', invert: 'NOT',
       hintBits: 'Klicke auf die Bits, um sie ein- oder auszuschalten (1 = an).',
-      bitsUsed: 'Genutzte Bits', footer: 'Mit ♥ gemacht von Noskyn'
+      bitsUsed: 'Genutzte Bits', footer: 'Erstellt von NoskynHK'
     }
   };
 
